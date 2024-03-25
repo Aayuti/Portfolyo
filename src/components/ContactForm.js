@@ -1,78 +1,73 @@
-import { useState } from "react";
-import DataFetcher from '../components/DataFetcher';
+import { useState, useEffect } from "react";
 
 const ContactForm = () => {
   const [contactData, setContactData] = useState({
     name: "",
     email: "",
-    messages: "",
+    message: "",
+    address: "",
+    phoneNumber: "",
   });
   const [error, setError] = useState(false);
-  const { name, email, messages } = contactData;
+
+  useEffect(() => {
+    fetchContactData();
+  }, []);
+
+  const fetchContactData = async () => {
+    try {
+      const response = await fetch("https://portfolio-backend-30mp.onrender.com/api/v1/get/user/65b3a22c01d900e96c4219ae");
+      const data = await response.json();
+      const { address, phoneNumber } = data.user.about; // Assuming the structure of your contact data
+      setContactData({ ...contactData, address, phoneNumber });
+    } catch (error) {
+      console.error("Error fetching contact data:", error);
+    }
+  };
+
+  const { name, email, message, address, phoneNumber } = contactData;
 
   const onChange = (e) =>
     setContactData({ ...contactData, [e.target.name]: e.target.value });
 
   const onSubmit = (e) => {
     e.preventDefault();
-    if (name.length === 0 || email.length === 0 || messages.length === 0) {
+    if (!name || !email || !message) {
       setError(true);
       setTimeout(() => {
         setError(false);
       }, 2000);
     } else {
       setError(false);
+      // Perform submit action
       setTimeout(() => {
-        setContactData({ name: "", email: "", messages: "" });
+        setContactData({ name: "", email: "", message: "" });
       }, 2000);
     }
   };
 
-  <DataFetcher url="https://portfolio-backend-30mp.onrender.com/api/v1/get/user/65b3a22c01d900e96c4219ae">
-        {userData => {
-          const address = userData?.user?.about?.address || '';
-          const phoneNumber = userData?.user?.about?.phoneNumber || '';
-          const avatarUrl = userData?.user?.about?.avatar?.url || '';
-          const alternateAvatars = userData?.user?.about?.alternateAvatars || [];
-          const timeline = userData?.user?.timeline || [];
-          const skills = userData?.user?.skills || [];
   return (
-    <section
-      className="section section-bg section-parallax section-parallax-2"
-      id="contact-section"
-    >
+    <section className="section section-bg section-parallax section-parallax-2" id="contact-section">
       <div className="container">
-        {/* Section Heading */}
         <div className="m-titles">
-          <h2
-            className="m-title"
-          >
-            Contact Me
-          </h2>
+          <h2 className="m-title">Contact Me</h2>
         </div>
         <div className="row row-custom">
           <div className="col-xs-12 col-sm-12 col-md-3 col-lg-3 align-right">
-            {/* Section numbers */}
             <div className="numbers-items contacts-items">
-              <div
-                className="numbers-item"
-              >
+              <div className="numbers-item">
                 <div className="icon">
                   <i aria-hidden="true" className="fas fa-phone" />
                 </div>
-                <div className="num"> {phoneNumber} </div>
+                <div className="num">{phoneNumber}</div>
               </div>
-              <div
-                className="numbers-item"
-              >
+              <div className="numbers-item">
                 <div className="icon">
                   <i aria-hidden="true" className="fas fa-at" />
                 </div>
                 <div className="num">hi@ober.com</div>
               </div>
-              <div
-                className="numbers-item"
-              >
+              <div className="numbers-item">
                 <div className="icon">
                   <i aria-hidden="true" className="fas fa-location-arrow" />
                 </div>
@@ -81,10 +76,7 @@ const ContactForm = () => {
             </div>
           </div>
           <div className="col-xs-12 col-sm-12 col-md-9 col-lg-9 vertical-line">
-            {/* contact form */}
-            <div
-              className="contacts-form"
-            >
+            <div className="contacts-form">
               <form id="cform" onSubmit={(e) => onSubmit(e)}>
                 <label>
                   Name
@@ -95,11 +87,7 @@ const ContactForm = () => {
                     value={name}
                     onChange={(e) => onChange(e)}
                   />
-                  {error && !name && (
-                    <label id="name-error" className="error" htmlFor="name">
-                      This field is required.
-                    </label>
-                  )}
+                  {error && !name && <label id="name-error" className="error" htmlFor="name">This field is required.</label>}
                 </label>
                 <label>
                   Email Address
@@ -110,33 +98,19 @@ const ContactForm = () => {
                     onChange={(e) => onChange(e)}
                     placeholder="Enter your email address"
                   />
-                  {error && !email && (
-                    <label id="email-error" className="error" htmlFor="email">
-                      This field is required.
-                    </label>
-                  )}
+                  {error && !email && <label id="email-error" className="error" htmlFor="email">This field is required.</label>}
                 </label>
                 <label>
                   Message
                   <textarea
                     name="message"
-                    value={messages}
+                    value={message}
                     onChange={(e) => onChange(e)}
                     placeholder="Enter your message here"
                   />
-                  {error && !messages && (
-                    <label
-                      id="message-error"
-                      className="error"
-                      htmlFor="message"
-                    >
-                      This field is required.
-                    </label>
-                  )}
+                  {error && !message && <label id="message-error" className="error" htmlFor="message">This field is required.</label>}
                 </label>
-                <a href="#" className="btn" onClick={(e) => onSubmit(e)}>
-                  Submit
-                </a>
+                <a href="#" className="btn" onClick={(e) => onSubmit(e)}>Submit</a>
               </form>
             </div>
             <div className="alert-success" style={{ display: "none" }}>
@@ -147,7 +121,6 @@ const ContactForm = () => {
       </div>
     </section>
   );
-}}
-</DataFetcher>
 };
+
 export default ContactForm;

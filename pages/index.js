@@ -1,17 +1,27 @@
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import ContactForm from "../src/components/ContactForm";
-import TestimonialSlider from "../src/components/TestimonialSlider";
+// import ContactForm from "../src/components/ContactForm";
+// import TestimonialSlider from "../src/components/TestimonialSlider";
 import Layout from "../src/layout/Layout";
 import DataFetcher from '../src/components/DataFetcher';
+// import { useState } from "react";
 
 const ProjectIsotop = dynamic(() => import("../src/components/ProjectIsotop"), {
   ssr: false,
 });
+
+const ContactForm = dynamic(() => import("../src/components/ContactForm"), {
+  ssr: false,
+});
+
+const TestimonialSlider = dynamic(() => import("../src/components/TestimonialSlider"), {
+  ssr: false,
+});
+
 const Index = () => {
   return(
     <DataFetcher url="https://portfolio-backend-30mp.onrender.com/api/v1/get/user/65b3a22c01d900e96c4219ae">
-        {(userData, skillsData, servicesData, timelineData, projectsData) => {
+        {(userData, skillsData, servicesData, timelineData, avatarUrl, projectsData, testimonialData, contactsData) => {
           // if(!userData || !skillsData) {
           //   console.log('Loading it is');
           //   return <div>Loading....</div>
@@ -39,7 +49,12 @@ const Index = () => {
           const serv = servicesData || [];
           const time = timelineData || [];
           const projects = projectsData || [];
-        
+          const contact = contactsData || [];
+          const testimonials = testimonialData || [];
+          console.log('Avatar URL in Index:', avatarUrl);
+          console.log('Projects data:', projectsData);
+          console.log('Testimonial Data:', testimonialData);
+
   return(
     <Layout>
       <section className="section section-started">
@@ -49,7 +64,8 @@ const Index = () => {
             <div
               className="slide"
             >
-              <img src="assets/images/profile.png" alt="" />
+              {/* <img src="assets/images/profile.png" alt="" /> */}
+              <img src={avatarUrl} alt="image profile" />
               <span className="circle circle-1">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -454,6 +470,8 @@ const Index = () => {
           <ProjectIsotop projects={projects}/>
         </div>
       </section>
+
+
       <section className="section" id="pricing-section">
         <div className="container">
           {/* Section Heading */}
@@ -480,7 +498,27 @@ const Index = () => {
           </div>
           {/* Pricing */}
           <div className="pricing-items row">
-            <div className="pricing-col col-xs-12 col-sm-6 col-md-6 col-lg-4">
+            
+            {serv.map((service, index) => (
+            <div key={index}className="pricing-col col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                <div
+                className="pricing-item"
+              >
+
+                <div className="title">{service.name}</div>
+                {/* <div className="subtitle">{service.desc}</div> */}
+                <div className="price">{service.charge}</div>
+                <div className="text">
+                  {service.desc}
+                </div>
+                <a href="#contact-section" className="btn">
+                  <span>Hire Me</span>
+                </a>
+              </div>
+            </div>
+          ))}
+
+            {/* <div className="pricing-col col-xs-12 col-sm-6 col-md-6 col-lg-4">
               <div
                 className="pricing-item"
               >
@@ -537,16 +575,24 @@ const Index = () => {
                   <span>Hire Me</span>
                 </a>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </section>
+
+
+
+
       <section className="section no-padding-top section-parallax section-parallax-4">
         <div className="container">
           {/* Testimonials */}
-          <TestimonialSlider />
+          {/* <TestimonialSlider /> */}
+          <TestimonialSlider testimonials={testimonials} />
         </div>
       </section>
+
+
+
       <section className="section section-bg" id="blog-section">
         <div className="container">
           {/* Section Heading */}
@@ -753,13 +799,13 @@ const Index = () => {
             </div>
             <div className="col-xs-12 col-sm-12 col-md-3 col-lg-3 align-center">
               <div className="clients-item">
-                <img src="assets/images/brand4.png" alt="" />
-              </div>
+                <img src="assets/images/brand4.png" alt="" /> 
+                </div>
             </div>
           </div>
         </div>
       </section>
-      <ContactForm />
+    <ContactForm contacts={contact} />
     </Layout>
   );
 }}

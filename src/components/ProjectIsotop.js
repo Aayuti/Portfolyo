@@ -97,10 +97,12 @@ const ProjectIsotop = () => {
                     </span>
                     <span className="desc">
                       <span className="name">{project.title}</span>
-                      <span className="category">
-                        {/* Assuming there's a category field in each project */}
+                      {/* <span className="category">
                         {project.category}
-                      </span>
+                      </span> */}
+                      <span className="category">{project.techStack.join(', ')}</span>
+                      <span className="category">{project.liveurl}</span>
+                      <span className="category">{project.githuburl}</span>
                     </span>
                   </a>
                 </Link>

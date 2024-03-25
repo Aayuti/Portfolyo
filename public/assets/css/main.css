@@ -4381,7 +4381,8 @@ h5.comment-box__details {
 
 	/*hero started*/
 	.hero-started .slide {
-		right: -266px;
+		right: 266px;
+		/* visibility: hidden; */
 	}
 	.hero-started .info-list {
 		margin-top: 144px;

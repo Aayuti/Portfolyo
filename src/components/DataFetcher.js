@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
+// import UserAvatar from './UserAvatar';
 
 function DataFetcher({ url, children }) {
   const [userData, setUserData] = useState(null);
   const [skillsData, setSkillsData] = useState(null);
   const [servicesData, setServicesData] = useState(null); // Add state for services data
-  const [timelineData, setTimelineData] = useState(null); // Add state for services data
+  const [timelineData, setTimelineData] = useState(null); 
+  const [avatarUrl, setAvatarUrl] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -20,6 +22,8 @@ function DataFetcher({ url, children }) {
         setSkillsData(jsonData.user.skills);
         setServicesData(jsonData.user.services); // Set services data state
         setTimelineData(jsonData.user.timeline); // Set services data state
+        setAvatarUrl(jsonData.user.about.avatar.url);
+        console.log('Avatar API is fetched:', jsonData.user.about.avatar.url);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -28,7 +32,9 @@ function DataFetcher({ url, children }) {
     fetchData();
   }, [url]);
 
-  return <>{children(userData, skillsData, servicesData, timelineData)}</>; // Pass servicesData to children
+  return<>
+    {/* {userData && avatarUrl && children(userData, avatarUrl)} */}
+    {children(userData, skillsData, servicesData, timelineData, avatarUrl)}</>; // Pass servicesData to children
 }
 
 export default DataFetcher;

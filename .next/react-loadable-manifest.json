@@ -1,8 +1,20 @@
 {
+  "index.js -> ../src/components/ContactForm": {
+    "id": "index.js -> ../src/components/ContactForm",
+    "files": [
+      "static/chunks/src_components_ContactForm_js.js"
+    ]
+  },
   "index.js -> ../src/components/ProjectIsotop": {
     "id": "index.js -> ../src/components/ProjectIsotop",
     "files": [
       "static/chunks/src_components_ProjectIsotop_js.js"
+    ]
+  },
+  "index.js -> ../src/components/TestimonialSlider": {
+    "id": "index.js -> ../src/components/TestimonialSlider",
+    "files": [
+      "static/chunks/src_components_TestimonialSlider_js.js"
     ]
   }
 }
